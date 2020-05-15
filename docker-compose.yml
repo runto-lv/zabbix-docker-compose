@@ -1,17 +1,17 @@
-version: "3" #定义类型为 3
+version: "3"
 services:
 
-  mysql-server:  #定义mysql服务
-    image: mysql:5.7 # 声明镜像
+  mysql-server:
+    image: mysql:5.7
     restart: "always"
     ports:
-      - "3306:3306" #声明端口
+      - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: 123456 #定义mysql密码
-      MYSQL_DATABASE: zabbix # 创建数据库
-      MYSQL_USER: zabbix #定义用户
-      MYSQL_PASSWORD: zabbix #用户密码
-    command: --character-set-server=utf8 #定义字符集
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: zabbix
+      MYSQL_USER: zabbix
+      MYSQL_PASSWORD: zabbix
+    command: --character-set-server=utf8
     volumes:
       - ./db:/var/lib/mysql
 
@@ -19,10 +19,10 @@ services:
     image: zabbix/zabbix-server-mysql:${VERSION}
     restart: "always"
     ports:
-      - "10051:10051" #声明端口
+      - "10051:10051"
     environment:
-      DB_SERVER_HOST: mysql-server #连接mysql
-      DB_SERVER_PORT: 3306 # 连接端口
+      DB_SERVER_HOST: mysql-server
+      DB_SERVER_PORT: 3306
       MYSQL_DATABASE: zabbix 
       MYSQL_USER: zabbix
       MYSQL_PASSWORD: zabbix
@@ -32,21 +32,21 @@ services:
       - ./curl:/usr/bin/curl
 
   zabbix-web:
-    image: zabbix/zabbix-web-nginx-mysql:${VERSION} #镜像
+    image: zabbix/zabbix-web-nginx-mysql:${VERSION}
     restart: "always"
     ports:
-      - "80:80" #声明端口
+      - "80:80"
       - "443:443"
     environment:
-      DB_SERVER_HOST: mysql-server #连接mysql
-      DB_SERVER_PORT: 3306 # 连接端口
+      DB_SERVER_HOST: mysql-server
+      DB_SERVER_PORT: 3306
       MYSQL_DATABASE: zabbix 
       MYSQL_USER: zabbix
       MYSQL_PASSWORD: zabbix
-      PHP_TZ: Asia/Shanghai #声明时区为亚洲/上海
+      PHP_TZ: Asia/Shanghai
       ZBX_SERVER_HOST: zabbix-server 
-    volumes:
-      - ./web:/usr/share/zabbix/
+#    volumes:
+#      - ./web:/usr/share/zabbix/
 
         #  zabbix-agent:
         #      image: zabbix/zabbix-agent
